@@ -1,0 +1,137 @@
+---
+title: Cleaner
+description: Free up disk space by removing temporary files, caches, and other junk that Windows accumulates over time.
+---
+
+The Sparkle Cleaner removes unnecessary system files that accumulate over time and waste disk space. You select which operations to run, then click **Clean Selected** to execute them in sequence. After each operation completes, Sparkle reports how much space was freed.
+
+## How it works
+
+Each cleaning operation runs a PowerShell script that measures the size of the target files before deleting them, then reports the freed space back to the UI. The timestamp of your last clean is saved and shown at the top of the page.
+
+<Note>
+All file deletions use `-ErrorAction SilentlyContinue`, so locked or in-use files are skipped without stopping the operation.
+</Note>
+
+## Cleaning operations
+
+### 1. Clean temporary files
+
+Removes both system temporary files (`C:\Windows\Temp`) and your user temporary files (`%TEMP%`).
+
+Use this regularly — these folders grow quickly as applications create scratch files that are rarely cleaned up automatically.
+
+```powershell
+$systemTemp = "$env:SystemRoot\Temp"
+$userTemp = [System.IO.Path]::GetTempPath()
+$foldersToClean = @($systemTemp, $userTemp)
+$totalSizeBefore = 0
+
+foreach ($folder in $foldersToClean) {
+    if (Test-Path $folder) {
+        $folderSize = (Get-ChildItem -Path $folder -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+        $totalSizeBefore += if ($folderSize) { $folderSize } else { 0 }
+        Get-ChildItem -Path $folder -Recurse -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
+Write-Output $totalSizeBefore
+```
+
+### 2. Clean prefetch files
+
+Deletes files from `C:\Windows\Prefetch`. Windows uses prefetch data to speed up application launches, but the folder can grow large and the data is regenerated automatically.
+
+Use this when troubleshooting slow app launches or to recover disk space. Windows will rebuild the prefetch cache on next use.
+
+```powershell
+$prefetch = "$env:SystemRoot\Prefetch"
+$totalSizeBefore = 0
+if (Test-Path $prefetch) {
+    $totalSizeBefore = (Get-ChildItem -Path "$prefetch\*" -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+    Remove-Item "$prefetch\*" -Force -Recurse -ErrorAction SilentlyContinue
+}
+Write-Output $totalSizeBefore
+```
+
+### 3. Empty recycle bin
+
+Permanently removes all files currently in the Recycle Bin. The script measures the bin's total size before emptying it.
+
+Use this when you've already reviewed the bin and are ready to permanently delete its contents.
+
+```powershell
+$recycleBinSize = 0
+$shell = New-Object -ComObject Shell.Application
+$recycleBin = $shell.Namespace(0xA)
+$recycleBinSize = ($recycleBin.Items() | Measure-Object -Property Size -Sum).Sum
+Clear-RecycleBin -Force -ErrorAction SilentlyContinue
+Write-Output $recycleBinSize
+```
+
+### 4. Clean Windows update cache
+
+Removes downloaded Windows Update installation files from `C:\Windows\SoftwareDistribution\Download`. These files are only needed during installation and can safely be deleted after updates have been applied.
+
+Use this after running Windows Update to reclaim the space used by downloaded update packages.
+
+```powershell
+$windowsUpdateDownload = "$env:SystemRoot\SoftwareDistribution\Download"
+$totalSizeBefore = 0
+if (Test-Path $windowsUpdateDownload) {
+    $totalSizeBefore = (Get-ChildItem -Path "$windowsUpdateDownload\*" -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+    Remove-Item "$windowsUpdateDownload\*" -Force -Recurse -ErrorAction SilentlyContinue
+}
+Write-Output $totalSizeBefore
+```
+
+### 5. Clear thumbnail cache
+
+Removes the thumbnail database files (`thumbcache_*.db`) stored by File Explorer at `%LOCALAPPDATA%\Microsoft\Windows\Explorer`. File Explorer rebuilds these files automatically when you browse folders.
+
+Use this if File Explorer is showing outdated or broken thumbnails, or to recover disk space.
+
+```powershell
+$thumbCache = "$env:LOCALAPPDATA\Microsoft\Windows\Explorer"
+$totalSizeBefore = 0
+$thumbFiles = Get-ChildItem "$thumbCache\thumbcache_*.db" -ErrorAction SilentlyContinue
+if ($thumbFiles) {
+    $totalSizeBefore = ($thumbFiles | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+    Remove-Item "$thumbCache\thumbcache_*.db" -Force -ErrorAction SilentlyContinue
+}
+Write-Output $totalSizeBefore
+```
+
+### 6. Clear error reports
+
+Removes crash dump files from `%LOCALAPPDATA%\CrashDumps`. These files are generated when applications crash and are used for debugging, but they are rarely needed after the crash has been investigated.
+
+Use this to free up space that has accumulated from application crashes.
+
+```powershell
+$crashDumps = "$env:LOCALAPPDATA\CrashDumps"
+$totalSizeBefore = 0
+if (Test-Path $crashDumps) {
+    $totalSizeBefore = (Get-ChildItem -Path "$crashDumps\*" -Recurse -Force -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+    Remove-Item "$crashDumps\*" -Force -Recurse -ErrorAction SilentlyContinue
+}
+Write-Output $totalSizeBefore
+```
+
+## Running a clean
+
+<Steps>
+  <Step title="Select operations">
+    Toggle on the cleaning operations you want to run. Each row shows the operation name, a short description, and the target path.
+  </Step>
+  <Step title="Click Clean Selected">
+    Click the **Clean Selected** button at the top right. Sparkle runs each selected operation in sequence and shows a progress notification for each one.
+  </Step>
+  <Step title="Review results">
+    After each operation completes, the amount of space freed is displayed next to the operation name. The last clean timestamp updates automatically.
+  </Step>
+</Steps>
+
+<Tip>
+Create a restore point on the **Backup** page before running a large clean if you are unsure about any of the operations.
+</Tip>

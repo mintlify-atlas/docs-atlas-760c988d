@@ -1,0 +1,133 @@
+---
+title: Utilities
+description: Access system maintenance tools and Windows settings from a single page, with toggles, buttons, and dropdowns that reflect your current configuration.
+---
+
+The Utilities page gives you direct access to common Windows maintenance tasks and settings. Every utility reads your current system state on page load and displays the appropriate control. All actions run PowerShell scripts in the background and show a toast notification when they complete.
+
+## Control types
+
+Utilities use one of three control types depending on the setting:
+
+| Control | Behavior |
+|---------|---------|
+| **Toggle** | Enables or disables a feature. Automatically detects the current state from the registry or a system script and reflects it on load. |
+| **Button** | Executes a one-time action such as cleaning, repairing, or restarting a service. |
+| **Dropdown** | Selects one option from multiple states. Automatically detects the current active value on load. |
+
+## Available utilities
+
+<AccordionGroup>
+  <Accordion title="Disk Cleaner">
+    Opens the Windows Disk Cleanup tool (`cleanmgr /sagerun:1`). Use this to run a guided cleanup that includes additional categories not covered by Sparkle's built-in cleaner.
+
+    **Control:** Button — **Clean Now**
+  </Accordion>
+
+  <Accordion title="Storage Sense">
+    Enables or disables Windows Storage Sense, which automatically removes files you don't need when your disk space is low. Reads and writes the `01` value under `HKCU:\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy`.
+
+    **Control:** Toggle
+  </Accordion>
+
+  <Accordion title="System Information">
+    Opens the Windows System Information panel (`msinfo32`). Use this to view detailed hardware and software specs including OS version, CPU, RAM, and installed drivers.
+
+    **Control:** Button — **View Info**
+  </Accordion>
+
+  <Accordion title="Fast Startup">
+    Enables or disables Fast Startup, which speeds up boot times by saving a kernel hibernation snapshot on shutdown. Reads and writes `HiberbootEnabled` under `HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Power`.
+
+    **Control:** Toggle
+  </Accordion>
+
+  <Accordion title="Windows Updates">
+    Controls the startup type of the Windows Update service (`wuauserv`). Choose from three states:
+
+    - **Default** — Sets the service to Automatic and starts it.
+    - **Manual** — Sets the service to Manual and stops it. Updates only run when you trigger them.
+    - **Disabled** — Stops and disables the service. Windows will not check for or apply updates.
+
+    **Control:** Dropdown — Default / Manual / Disabled
+  </Accordion>
+
+  <Accordion title="Graphics Driver">
+    Restarts all active display adapters using `Disable-PnpDevice` followed by `Enable-PnpDevice`. Use this to fix display glitches, black screens, or flickering without rebooting.
+
+    **Control:** Button — **Restart**
+  </Accordion>
+
+  <Accordion title="Power Plan">
+    Switches the active Windows power plan. Choose from four options:
+
+    - **Balanced** — Default Windows power plan.
+    - **High Performance** — Prioritizes performance over energy savings.
+    - **Power Saver** — Reduces power consumption.
+    - **Ultimate Performance** — Maximum performance; creates the plan if it doesn't exist.
+
+    **Control:** Dropdown — Balanced / High Performance / Power Saver / Ultimate Performance
+  </Accordion>
+
+  <Accordion title="Flush DNS Cache">
+    Runs `ipconfig /flushdns` to clear the DNS resolver cache. Use this to fix connection issues caused by stale or incorrect DNS records.
+
+    **Control:** Button — **Flush**
+  </Accordion>
+
+  <Accordion title="Release IP">
+    Runs `ipconfig /release` to release your current IP address. This temporarily disconnects you from the network. Use it before renewing your IP or troubleshooting DHCP issues.
+
+    **Control:** Button — **Release**
+  </Accordion>
+
+  <Accordion title="Renew IP">
+    Runs `ipconfig /renew` to request a new IP address from the DHCP server. Use this after releasing your IP or when your connection is stuck.
+
+    **Control:** Button — **Renew**
+  </Accordion>
+
+  <Accordion title="Fix Bluetooth">
+    Restarts the Bluetooth Support Service (`bthserv`) by stopping and then starting it. Use this to resolve Bluetooth pairing or connectivity issues without rebooting.
+
+    **Control:** Button — **Fix**
+  </Accordion>
+
+  <Accordion title="System File Checker">
+    Runs `sfc /scannow` in a new PowerShell window to scan and repair corrupted or missing Windows system files. The window stays open so you can see the output. This can take several minutes.
+
+    **Control:** Button — **Repair**
+  </Accordion>
+
+  <Accordion title="DISM Health Restore">
+    Runs `dism /online /cleanup-image /restorehealth` in a new PowerShell window to repair the Windows image using Windows Update as a source. Use this when SFC reports errors it cannot fix on its own.
+
+    **Control:** Button — **Repair**
+  </Accordion>
+
+  <Accordion title="Check Disk">
+    Runs `chkdsk /f /r /x` in a new PowerShell window to check for and fix disk errors. This typically requires a reboot to run on the system drive.
+
+    **Control:** Button — **Check**
+  </Accordion>
+
+  <Accordion title="Restart Audio Service">
+    Stops and restarts the Windows Audio service (`Audiosrv`). Use this to fix sound issues such as no audio output, crackling, or devices not being detected.
+
+    **Control:** Button — **Restart**
+  </Accordion>
+
+  <Accordion title="Network Reset">
+    Runs `netsh winsock reset` and `netsh int ip reset` to reset the Windows network stack. Use this to fix persistent connectivity problems that other tools haven't resolved. A restart is required for the changes to take full effect.
+
+    **Control:** Button — **Reset**
+  </Accordion>
+</AccordionGroup>
+
+## Searching utilities
+
+Type in the search bar at the top of the page to filter utilities by name or description. The list updates in real time as you type.
+
+<Warning>
+Some utilities open a new PowerShell window and run operations that can take several minutes (SFC, DISM, Check Disk). Do not close those windows until the operation finishes.
+</Warning>

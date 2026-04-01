@@ -1,80 +1,97 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Apply your first Windows tweaks safely with Sparkle. This guide walks you through creating a restore point, browsing tweaks, running the Cleaner, and exploring the rest of the app."
 ---
 
-## Get started in three steps
+This guide walks you through Sparkle's core features on your first run. The whole process takes about five minutes.
 
-Get your documentation site running locally and make your first customization.
+<Warning>
+  Sparkle is currently in beta. Follow this guide in order — create a restore point before you apply any tweaks so you can roll back if something doesn't behave as expected.
+</Warning>
 
-### Step 1: Set up your local environment
+## First-use walkthrough
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+<Steps>
+  <Step title="Create a restore point">
+    Open Sparkle and navigate to the **Backup** page from the sidebar.
 
-### Step 2: Deploy your changes
+    Click **Create Restore Point** and give it a descriptive name such as `Before Sparkle tweaks`. Windows will snapshot your current system state. This gives you a reliable fallback if you want to undo everything later.
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    <Tip>
+      Get into the habit of creating a new restore point before each Sparkle session, especially before trying tweaks you haven't used before.
+    </Tip>
+  </Step>
+  <Step title="Navigate to the Tweaks page">
+    Click **Tweaks** in the sidebar. The page lists all available tweaks organised into categories such as **Performance**, **Privacy**, **Gaming**, and **Appearance**.
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    Each tweak shows a short description and a risk level. Tweaks marked **Safe** make reversible changes that are unlikely to affect stability.
+  </Step>
+  <Step title="Browse the categories">
+    Scroll through the categories to get a feel for what's available. You'll find tweaks for things like:
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+    - Disabling Windows telemetry and data collection
+    - Enabling Game Mode and Hardware-Accelerated GPU Scheduling (HAGS)
+    - Removing Microsoft Bing search integration
+    - Clearing the Start menu and taskbar of unnecessary clutter
+    - Setting services to manual to reduce background resource usage
+  </Step>
+  <Step title="Apply your first tweak">
+    As a safe starting point, try **Disable Telemetry**. This tweak disables Windows data collection and reporting via registry changes and service adjustments. It is marked **Safe** and can be unapplied at any time from the same page.
 
-### Step 3: Go live
+    Toggle the tweak on and wait for Sparkle to confirm it applied successfully.
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+    <Tip>
+      Other good first tweaks to try:
+
+      - **Enable Game Mode** — enables Windows Game Mode to prioritise resources for games
+      - **Disable Mouse Acceleration** — removes pointer acceleration for more consistent mouse movement
+      - **Hide Taskview and Widgets** — cleans up the taskbar by removing buttons you may never use
+      - **Enable Dark Mode** — switches Windows to the system dark theme
+
+      All of these are marked **Safe** and fully reversible.
+    </Tip>
+  </Step>
+  <Step title="Run the Cleaner">
+    Click **Cleaner** in the sidebar. The Cleaner scans for and removes:
+
+    - System and user temporary files
+    - Windows Prefetch files
+    - Recycle Bin contents
+    - Windows Update download cache
+    - Thumbnail cache
+    - Error reports and crash dumps
+
+    Select the items you want to clear and click **Clean**. Sparkle reports how much disk space was freed after each operation.
+  </Step>
+  <Step title="Explore the rest of the app">
+    Now that you've applied your first tweaks and run a clean, take a few minutes to explore the other pages.
+
+    <CardGroup cols={2}>
+      <Card title="Utilities" icon="wrench" href="/features/utilities">
+        Run SFC, DISM, disk checks, and manage power plans from one place.
+      </Card>
+      <Card title="DNS manager" icon="globe" href="/features/dns-manager">
+        Switch to a faster or more private DNS server such as Cloudflare or Google.
+      </Card>
+      <Card title="App installer" icon="box-open" href="/features/apps">
+        Install popular apps via Winget and Chocolatey with a single click.
+      </Card>
+      <Card title="Backup & restore" icon="clock-rotate-left" href="/features/backup">
+        Create and restore Windows restore points without leaving Sparkle.
+      </Card>
+    </CardGroup>
+  </Step>
+</Steps>
 
 ## Next steps
 
-Now that you have your docs running, explore these key features:
+Once you're comfortable with the basics, dig deeper into what's available:
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Tweaks reference" icon="sliders" href="/tweaks/overview">
+    Browse every available tweak with full descriptions, risk levels, and what each one changes.
+  </Card>
+  <Card title="Features overview" icon="layout-grid" href="/features/tweaks">
+    Learn how each Sparkle feature works in detail.
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

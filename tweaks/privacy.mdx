@@ -1,0 +1,174 @@
+---
+title: 'Privacy tweaks'
+description: 'Tweaks that disable Windows data collection, tracking, and vendor-installed software to improve your privacy.'
+---
+
+Privacy tweaks disable or remove Windows features that collect, transmit, or expose user data — including telemetry pipelines, location services, AI-powered recall, and vendor boot-time software. Most of these tweaks are safe to apply and have no effect on day-to-day usability.
+
+<AccordionGroup>
+  <Accordion title="Disable Telemetry">
+    Disables Windows telemetry and data collection for improved privacy and performance.
+
+    Modifies registry keys to prevent Windows from collecting and reporting diagnostic and usage data. This reduces background network and CPU activity in addition to the direct privacy benefit.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Note>
+      This tweak is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Location Tracking">
+    Disables Windows location tracking.
+
+    Disables telemetry, location access, diagnostic tracking, and automatic Windows update delivery by setting related registry values. This prevents Windows and apps from querying or reporting the device's physical location.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+  </Accordion>
+
+  <Accordion title="Disable Wifi Sense">
+    Disables Wifi Sense to prevent sharing of Wi-Fi networks with contacts.
+
+    Sets Wifi Sense policy values to `0`, disabling automatic connection to open hotspots and blocking location-based Wi-Fi hotspot reporting. This prevents Windows from sharing your Wi-Fi credentials with contacts and reduces unwanted background network activity.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Network.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Consumer Features">
+    Prevents Windows from automatically installing games, third-party apps, or app links from the Microsoft Store.
+
+    Disables Windows Consumer Features, blocking the automatic installation of suggested apps, games, and Microsoft Store links that Windows pushes to new or reset installations.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | Yes |
+
+    <Warning>
+      Some default apps may become inaccessible after applying this tweak — for example, Phone Link. You can re-enable consumer features through Group Policy or the registry to restore them.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Windows Recall">
+    Disables the Windows Recall feature for better privacy.
+
+    Sets `AllowRecallEnablement` to `0` under `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`, disabling Windows Recall at the system level via policy.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | Yes |
+    | **Restart required** | Yes |
+
+    <Note>
+      Windows Recall continuously captures screenshots to build a searchable history of on-screen activity. Disabling it prevents this data from being collected or stored.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Remove Microsoft Bing Integration">
+    Removes Bing apps and disables Bing web search in Windows Search.
+
+    Uninstalls all Microsoft Bing apps (News, Weather, Finance, and related packages) and disables Bing web search results from appearing in Windows Search. This improves search privacy and speeds up local search queries by eliminating the network round-trip.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | Yes |
+
+    <Note>
+      Removed Bing apps can be reinstalled individually from the Microsoft Store. This tweak is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Windows Platform Binary Table (WPBT)">
+    Prevents your computer vendor from executing programs at boot, reducing potential security risks.
+
+    Windows Platform Binary Table (WPBT) is a firmware mechanism that allows manufacturers to inject and execute software on every boot, including drivers or anti-theft utilities. Disabling WPBT blocks this mechanism, preventing vendor software from running before the OS is fully loaded.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | Yes |
+    | **Restart required** | Yes |
+
+    <Warning>
+      Some vendor software — such as manufacturer-provided drivers or anti-theft tools — may not run at startup after this tweak is applied. Review what your system vendor installs via WPBT before disabling it.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Background MS Store Apps">
+    Disables Microsoft Store apps from running in the background.
+
+    Sets `GlobalUserDisabled` to `1` under the current user's `BackgroundAccessApplications` registry key, preventing all UWP apps from performing background activity such as fetching notifications, syncing data, or updating live tiles.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Debloat Windows">
+    Removes built-in Windows apps and bloatware to reduce the Microsoft software footprint.
+
+    Offers two removal methods: the Sparkle custom selective script (a WPF window where you choose which apps to keep) and Raphire's Win11Debloat script (a comprehensive removal of most built-in Microsoft apps). Both improve privacy by removing components that phone home to Microsoft servers.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | No |
+    | **Recommended** | Yes |
+
+    <Warning>
+      Removed apps cannot be restored from within Sparkle. Choose the Sparkle selective script if you want fine-grained control over what is removed.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Remove OneDrive">
+    Removes OneDrive from the system.
+
+    Uses registry edits, file system commands, and process termination to fully uninstall OneDrive and clean up leftovers. OneDrive files are moved to your home folder before removal so no data is lost.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+
+    <Note>
+      OneDrive can be reinstalled from the Microsoft website if needed. This tweak is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Remove Gaming Apps">
+    Removes Xbox app, Xbox Game Bar, and Xbox Game Overlay.
+
+    Uninstalls Xbox-related UWP packages to eliminate background Xbox identity, social, and telemetry services that run even when no game is active.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | No |
+
+    <Warning>
+      Removed apps cannot be restored from within Sparkle. Search for **Xbox Game Bar** and **Xbox App** in the Microsoft Store to reinstall them.
+    </Warning>
+  </Accordion>
+</AccordionGroup>

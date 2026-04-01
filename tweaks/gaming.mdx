@@ -1,0 +1,158 @@
+---
+title: 'Gaming tweaks'
+description: 'Tweaks that improve in-game performance, reduce latency, and configure Windows and GPU settings for gaming.'
+---
+
+Gaming tweaks configure Windows features and GPU settings specifically for lower latency and higher frame rates. Some tweaks in other categories (such as Performance) also benefit gaming workloads — refer to the [overview](/tweaks/overview) for the complete picture.
+
+<AccordionGroup>
+  <Accordion title="Ultimate Performance Power Plan">
+    Enables and applies the Windows Ultimate Performance power plan.
+
+    Creates the Ultimate Performance power plan if it is not already present, retrieves its GUID, and activates it. This prevents power-saving states from throttling CPU frequency or I/O response time during gameplay.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Note>
+      This is one of the highest-impact single tweaks for reducing input latency. It is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Enable Game Mode">
+    Enables Game Mode on Windows.
+
+    Activates the Windows Game Mode feature, which prioritizes system resources for the active game process. Results are hardware-dependent — some systems see measurable improvement, others see no change or occasional regressions.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      Test with Game Mode on and off to determine whether it benefits your specific hardware and the games you play.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Enable HAGS">
+    Enables Hardware-Accelerated GPU Scheduling (HAGS).
+
+    Shifts GPU scheduling and memory management tasks from the CPU to the GPU, reducing CPU overhead and potentially lowering frame latency in GPU-bound scenarios.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      HAGS performance impact varies by GPU generation, driver version, and workload. It is most beneficial on newer NVIDIA and AMD GPUs with up-to-date drivers.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Optimize Nvidia Settings">
+    Changes NVIDIA Control Panel settings to improve gaming performance.
+
+    Applies a comprehensive set of NVIDIA profile changes:
+
+    - Image Scaling → Off
+    - Ambient Occlusion → Off
+    - Anisotropic Filtering → Application-controlled
+    - Antialiasing (FXAA, Gamma Correction, Mode) → Off / Application-controlled
+    - Low Latency Mode → On
+    - Max Frame Rate → Off
+    - Power Management Mode → Prefer Maximum Performance
+    - Shader Cache Size → Unlimited
+    - Texture Filtering → High Performance
+    - Threaded Optimization → On
+    - Triple Buffering → Off
+    - Vertical Sync → Off
+    - Virtual Reality pre-rendered frames → 1
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | No (revert manually in NVIDIA Control Panel) |
+
+    <Note>
+      Open the NVIDIA Control Panel at least once before applying this tweak to ensure profile settings are initialized correctly.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Enable Optimization For Windowed Games">
+    Enables the Windows system-level optimization for windowed games.
+
+    Activates the windowed game optimization feature introduced in Windows 11, which applies rendering improvements to games running in windowed or borderless-windowed mode, reducing the latency penalty of non-fullscreen rendering.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Restart required** | Yes |
+  </Accordion>
+
+  <Accordion title="Set Services to Manual">
+    Sets non-essential Windows services to manual startup to reduce background resource contention.
+
+    Modifies the startup type of selected services so they do not run at boot unless explicitly needed. This reduces CPU, RAM, and I/O usage that would otherwise compete with game processes.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Note>
+      This tweak is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Core Isolation">
+    Disables Core Isolation Memory Integrity to reduce CPU overhead.
+
+    Disables Hypervisor-Enforced Code Integrity (HVCI) by setting `Enabled` to `0` in the DeviceGuard registry path. HVCI adds a virtualization layer for kernel code verification that introduces a measurable CPU overhead in some workloads.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+    | **Restart required** | Yes |
+
+    <Warning>
+      Disabling Memory Integrity reduces kernel-level exploit protection. Only apply this on systems where you have assessed and accepted the security trade-off.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Mouse Acceleration">
+    Disables mouse acceleration for consistent and precise cursor movement.
+
+    Sets `MouseSpeed`, `MouseThreshold1`, and `MouseThreshold2` to `0` to produce linear 1:1 cursor movement, eliminating the Windows pointer precision curve.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      Linear mouse movement is preferred by most FPS and strategy game players because consistent hand-to-cursor mapping makes muscle memory more reliable.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Optimize Network Settings">
+    Applies TCP/IP and network stack tuning to improve latency and throughput for online gaming.
+
+    Applies a comprehensive set of `netsh` TCP/IP tweaks: disabling latency-inducing features, enabling TCP Fast Open, offloading networking tasks to hardware, tuning congestion control, and setting optimal MTU. This maximizes network speed, reduces CPU load from packet processing, and improves responsiveness.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Restart required** | Yes |
+
+    <Note>
+      This tweak is also categorized under Network.
+    </Note>
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,72 @@
+---
+title: Backup & restore
+description: Create and manage Windows System Restore points from inside Sparkle so you can roll back system changes at any time.
+---
+
+The Backup page lets you create and restore Windows System Restore points without leaving Sparkle. A restore point captures a snapshot of your system's configuration — registry settings, installed drivers, and system files — at a specific moment in time. If something goes wrong after applying tweaks, you can roll back to that snapshot.
+
+<Warning>
+Always create a restore point before applying tweaks, especially tweaks rated **Caution** or **Risky**. Restore points do not protect your personal files, but they do revert system and registry changes.
+</Warning>
+
+## Restore points and Windows System Restore
+
+Sparkle uses the built-in Windows System Restore infrastructure (`Checkpoint-Computer` and `Restore-Computer`). Restore points created by Sparkle appear in the standard Windows **System Restore** wizard alongside any other restore points on your system.
+
+Sparkle sets the `SystemRestorePointCreationFrequency` registry value to `0` each time it creates a restore point. This removes Windows' default cooldown period, which normally prevents creating more than one restore point per 24 hours.
+
+<Note>
+Listing restore points is a beta feature and may be unreliable in some configurations. Creating and restoring restore points works as expected.
+</Note>
+
+## Creating a restore point
+
+You have two options on the Backup page:
+
+<Tabs>
+  <Tab title="Quick restore point">
+    Click **Quick Restore Point**. Sparkle creates a restore point with an automatic label in the format `SparkleBackup-YYYY-MM-DD_HH-MM-SS`. The list refreshes automatically when it finishes.
+
+    Use this for a fast snapshot before making changes.
+  </Tab>
+  <Tab title="Custom restore point">
+    Click **Custom Restore Point**, enter a descriptive name in the dialog, then click **Create**. Sparkle appends a timestamp to your name (e.g., `MyBackup-2026-04-01_14-30-00`). The list refreshes automatically when it finishes.
+
+    Use this when you want a recognizable label you can identify later.
+  </Tab>
+</Tabs>
+
+Creation can take a minute or more depending on your hardware. A spinner is shown while Sparkle is working.
+
+## Restoring from a restore point
+
+<Steps>
+  <Step title="Find the restore point">
+    The table on the Backup page lists all restore points on your system with their description. Use the search bar to filter by name if you have many entries.
+  </Step>
+  <Step title="Click Restore">
+    Click the **Restore** button on the row you want. A confirmation dialog opens showing the restore point's description.
+  </Step>
+  <Step title="Confirm">
+    Read the warning in the dialog, then click **Restore**. Sparkle calls `Restore-Computer` with the restore point's sequence number. Your PC will restart shortly to apply the restore.
+  </Step>
+</Steps>
+
+<Warning>
+Restoring a restore point will revert all system and registry changes made since that point was created — including any tweaks applied through Sparkle. Your personal files (documents, photos, downloads) are not affected. Recently installed applications and their settings may be removed.
+</Warning>
+
+## When to create a restore point
+
+- **Before applying tweaks** — Especially before enabling any tweak rated Caution or Risky.
+- **Before running DISM or SFC** — System repair tools can change system files.
+- **Before installing new drivers** — In case a driver causes instability.
+- **Before uninstalling Sparkle** — If you want to revert all tweaks, restore to a point created before you started using Sparkle.
+
+<Tip>
+If you plan to uninstall Sparkle and want a clean system, revert your tweaks manually first by toggling them off in the Tweaks page, then restore to a pre-Sparkle restore point for a complete rollback.
+</Tip>
+
+## Deleting restore points
+
+Click **Delete All** to remove every restore point on your system. This runs `vssadmin delete shadows /all /quiet`. Use this to free up disk space occupied by shadow copies, but only when you are confident you no longer need them.

@@ -1,0 +1,74 @@
+{
+  "projectType": "saas",
+  "projectName": "Sparkle",
+  "projectDescription": "A free, open-source Windows desktop app that debloats, optimizes, and cleans your PC through a modern GUI.",
+  "theme": "almond",
+  "primaryColor": "#044dfc",
+  "lightColor": null,
+  "darkColor": null,
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
+              "features/tweaks",
+              "features/cleaner",
+              "features/utilities",
+              "features/dns-manager",
+              "features/apps",
+              "features/backup"
+            ]
+          },
+          {
+            "group": "Tweaks Reference",
+            "pages": [
+              "tweaks/overview",
+              "tweaks/performance",
+              "tweaks/privacy",
+              "tweaks/gaming",
+              "tweaks/appearance",
+              "tweaks/network"
+            ]
+          },
+          {
+            "group": "Contributing",
+            "pages": [
+              "contributing/overview",
+              "contributing/creating-tweaks",
+              "contributing/adding-apps"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Apply and revert Windows optimization tweaks via PowerShell scripts",
+    "Clean temporary files, prefetch, recycle bin, update cache, and thumbnails",
+    "Manage DNS providers (Cloudflare, Google, OpenDNS, Quad9, AdGuard, custom)",
+    "Install/uninstall 100+ apps via Winget and Chocolatey integration",
+    "System utilities: disk cleaner, SFC, DISM, power plan, fast startup, and more",
+    "GUI restore point manager for safe backup and revert",
+    "Risk-level indicators (safe/caution/risky) for every tweak",
+    "Auto-updates via electron-updater"
+  ],
+  "publicApiSurface": [
+    "tweaks/*/meta.json — tweak metadata schema",
+    "tweaks/*/apply.ps1 — tweak apply script",
+    "tweaks/*/unapply.ps1 — tweak unapply script",
+    "src/renderer/assets/apps.json — app installer registry",
+    "tweaks/registry.json — registry tweak definitions",
+    "tweaks/registry-scripts.json — registry script definitions"
+  ]
+}

@@ -1,0 +1,136 @@
+---
+title: "Adding apps"
+description: "How to add a new application to the Sparkle app installer by editing apps.json."
+---
+
+The Sparkle app installer is powered by a single JSON file. Adding a new app means adding one entry to that file and opening a pull request.
+
+## Where `apps.json` lives
+
+```text
+src/renderer/src/assets/apps.json
+```
+
+The file contains a top-level `apps` array. Each element in the array is an app entry object.
+
+## App entry schema
+
+| Field | Required | Description |
+|---|---|---|
+| `name` | Yes | Display name shown on the app card. |
+| `id` | Yes* | Winget package ID (e.g. `Mozilla.Firefox`). |
+| `chocolatey` | No | Chocolatey package name (e.g. `firefox`). |
+| `category` | Yes | Category used to group the app. Must be one of the valid values listed below. |
+| `info` | Yes | Short description shown on the app card. |
+| `link` | No | URL to the app's official website. Opens in the user's browser. |
+| `icon` | Yes | URL to a publicly accessible icon image for the app. |
+| `warning` | No | Optional warning message displayed to the user before installing. |
+
+\* Required for Winget installs. If the app is only available via Chocolatey, `id` can be omitted and only `chocolatey` needs to be set.
+
+### Winget ID vs. Chocolatey package name
+
+- **Winget ID** — uses the format `Publisher.AppName` (e.g. `Mozilla.Firefox`, `Discord.Discord`, `Valve.Steam`). You can find the correct ID by running `winget search <app name>` in a terminal or browsing [winget.run](https://winget.run).
+- **Chocolatey package name** — a lowercase identifier used by the Chocolatey registry (e.g. `firefox`, `discord`, `steam`). You can search for packages at [community.chocolatey.org](https://community.chocolatey.org/packages).
+
+Including both fields lets users install the app regardless of which package manager they have selected in Sparkle.
+
+## Valid categories
+
+| Value | Displayed as |
+|---|---|
+| `browsers` | Browsers |
+| `communication` | Communication |
+| `development` | Development |
+| `games` | Games |
+| `multimedia` | Multimedia |
+| `productivity` | Productivity |
+| `privacy & security` | Privacy & Security |
+| `utilities` | Utilities |
+| `python` | Python |
+
+Use the exact lowercase string shown in the **Value** column in your entry.
+
+## Real example entries
+
+The following entries are taken directly from `apps.json`.
+
+### App with both package managers
+
+```json
+{
+  "name": "Firefox",
+  "id": "Mozilla.Firefox",
+  "chocolatey": "firefox",
+  "category": "browsers",
+  "info": "A fast, private and secure web browser.",
+  "link": "https://www.mozilla.org/en-US/firefox/new/",
+  "icon": "https://www.firefox.com/favicon.ico"
+}
+```
+
+### App with a warning
+
+Some apps have known installation issues when Sparkle is running as administrator. Use the `warning` field to surface that information to the user before they install.
+
+```json
+{
+  "name": "Spotify",
+  "id": "Spotify.Spotify",
+  "chocolatey": "spotify",
+  "warning": "This app may not install properly as Sparkle runs as admin. However, uninstalling will continue to work as normal.",
+  "category": "multimedia",
+  "info": "Listen to music and podcasts.",
+  "link": "https://www.spotify.com/",
+  "icon": "https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Spotify_Primary_Logo_RGB_Green.png"
+}
+```
+
+### Games category entry
+
+```json
+{
+  "name": "Steam",
+  "id": "Valve.Steam",
+  "chocolatey": "steam",
+  "category": "games",
+  "info": "A digital distribution platform for video games.",
+  "link": "https://store.steampowered.com/",
+  "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/2048px-Steam_icon_logo.svg.png"
+}
+```
+
+## How to test your addition
+
+<Steps>
+  <Step title="Add your entry to apps.json">
+    Open `src/renderer/src/assets/apps.json` and add your app object to the `apps` array. Place it near other entries in the same category to keep the file organized.
+  </Step>
+  <Step title="Run Sparkle in development mode">
+    ```bash
+    npm install
+    npm run dev
+    ```
+
+    Open the **Apps** page and verify that your entry appears in the correct category with the right name, icon, and description.
+  </Step>
+  <Step title="Test install and uninstall">
+    Select your app and click **Install Selected**. Confirm the installation completes without errors. Then click **Uninstall Selected** and confirm the uninstall also completes cleanly.
+
+    <Warning>
+      Run this test on a machine where it is safe to install and remove software. Administrator privileges are recommended.
+    </Warning>
+  </Step>
+  <Step title="Check both package managers">
+    If you supplied both `id` and `chocolatey`, switch the **Select Source** dropdown between Winget and Chocolatey and verify the install works with each.
+  </Step>
+</Steps>
+
+## Submit your addition
+
+Once you have tested your entry locally, open a pull request on [GitHub](https://github.com/parcoil/sparkle):
+
+1. Fork the [repository](https://github.com/parcoil/sparkle).
+2. Create a new branch for your change.
+3. Commit your edit to `apps.json`.
+4. Open a pull request with a short description of the app you added and why it is a useful addition to Sparkle.

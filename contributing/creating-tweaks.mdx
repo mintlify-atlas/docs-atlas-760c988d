@@ -1,0 +1,194 @@
+---
+title: "Creating tweaks"
+description: "How to write, structure, and submit a new tweak for Sparkle."
+---
+
+Tweaks are PowerShell scripts paired with a `meta.json` configuration file. Sparkle reads the metadata to display the tweak in the UI and runs the scripts when the user applies or reverts it.
+
+## Directory structure
+
+Each tweak lives in its own subdirectory under `tweaks/`:
+
+```text
+tweaks/
+└── your-tweak-name/
+    ├── meta.json
+    ├── apply.ps1
+    └── unapply.ps1
+```
+
+<Tip>
+  If a tweak cannot be reversed, omit `unapply.ps1`. Sparkle will display an **Apply** button instead of a toggle in the UI.
+</Tip>
+
+## `meta.json` schema
+
+Every tweak must include a `meta.json` file. The table below describes all available fields.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | Yes | Folder name of the tweak. Must match the directory name. |
+| `title` | `string` | Yes | Text displayed in the UI card. |
+| `description` | `string` | Yes | Short description shown on the UI card. |
+| `category` | `string[]` | Yes | One or more categories used to sort tweaks in the UI. |
+| `reversible` | `boolean` | No (default `true`) | Set to `false` to show an **Apply** button instead of a toggle. |
+| `modal` | `string` | No | Text shown in a confirmation modal before the tweak is applied. |
+| `recommended` | `boolean` | No | Displays a recommended icon on the UI card. |
+| `top` | `boolean` | No | Pins the tweak to the top of the list. |
+| `warning` | `string` | No | Displays a warning icon; users see the text on hover. |
+| `restart` | `boolean` | No | Shows a message indicating a system restart is required. |
+| `deepDescription` | `string` | No | Detailed description supporting Markdown. Used in documentation. |
+| `links` | `object[]` | No | Related resources. Each object must have `name` and `url` string properties. |
+| `risk` | `string` | No | Risk level: `safe`, `caution`, or `risky`. Shows a corresponding icon in the UI. |
+| `addedversion` | `string` | No* | Version string when the tweak was first added. Appears in the UI. |
+| `updatedversion` | `string` | No* | Version string when the tweak was last updated. Appears in the UI. |
+
+<Note>
+  `addedversion` is required for all new tweaks. `updatedversion` is required whenever you update an existing tweak.
+</Note>
+
+## Risk levels
+
+| Level | When to use |
+|---|---|
+| `safe` | No meaningful risk to system stability or data. |
+| `caution` | May affect system behavior; the user should understand what it does before applying. |
+| `risky` | Could cause instability or be difficult to reverse; should include a `warning` and ideally a `modal`. |
+
+## Categories
+
+Assign one or more of the following categories in the `category` array:
+
+| Category | Description |
+|---|---|
+| `General` | General-purpose tweaks that don't fit a specific area. |
+| `Appearance` | Changes to Windows visual elements and themes. |
+| `Performance` | Improvements to system or application performance. |
+| `Privacy` | Tweaks that reduce data collection or tracking. |
+| `Gaming` | Optimizations for FPS, game services, or GPU configuration. |
+| `Network` | Adjustments to network and connectivity settings. |
+| `GPU` | Modifications specific to GPU configuration. |
+
+## Toggle vs. apply-only
+
+If your tweak modifies a setting that can be cleanly reversed, include both `apply.ps1` and `unapply.ps1`. The UI will render a toggle.
+
+If the change cannot be reversed — for example, because it deletes files or makes a one-way system change — omit `unapply.ps1` entirely. The UI will render an **Apply** button instead of a toggle. You can also set `"reversible": false` in `meta.json` explicitly.
+
+## Working example: disable telemetry
+
+The following is the real **Disable Telemetry** tweak from the Sparkle repository.
+
+### `meta.json`
+
+```json
+{
+  "title": "Disable Telemetry",
+  "name": "disable-telemetry",
+  "risk": "safe",
+  "recommended": true,
+  "addedversion": "2.14.0",
+  "top": true,
+  "description": "Disables Windows telemetry and data collection for improved privacy and performance.",
+  "deepDescription": "Disables Windows telemetry by modifying registry keys to prevent data collection and reporting to Microsoft. This tweak was previously in Sparkle but was removed due to issues with the tweak not applying correctly. It has been re-added.",
+  "category": ["Privacy", "Performance"]
+}
+```
+
+### `apply.ps1`
+
+```powershell
+# Registry tweaks
+$registrySettings = @(
+    @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo"; Name="Enabled"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy"; Name="TailoredExperiencesWithDiagnosticDataEnabled"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy"; Name="HasAccepted"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\Input\TIPC"; Name="Enabled"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\InputPersonalization"; Name="RestrictImplicitInkCollection"; Value=1 },
+    @{ Path="HKCU:\Software\Microsoft\InputPersonalization"; Name="RestrictImplicitTextCollection"; Value=1 },
+    @{ Path="HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore"; Name="HarvestContacts"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\Personalization\Settings"; Name="AcceptedPrivacyPolicy"; Value=0 },
+    @{ Path="HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection"; Name="AllowTelemetry"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"; Name="Start_TrackProgs"; Value=0 },
+    @{ Path="HKLM:\SOFTWARE\Policies\Microsoft\Windows\System"; Name="PublishUserActivities"; Value=0 },
+    @{ Path="HKCU:\Software\Microsoft\Siuf\Rules"; Name="NumberOfSIUFInPeriod"; Value=0 }
+)
+
+foreach ($reg in $registrySettings) {
+    New-Item -Path $reg.Path -Force | Out-Null
+    Set-ItemProperty -Path $reg.Path -Name $reg.Name -Value $reg.Value -Type DWord
+}
+
+# Disable Defender Auto Sample Submission
+Set-MpPreference -SubmitSamplesConsent 2
+
+# Disable Connected User Experiences and Telemetry service
+Set-Service -Name diagtrack -StartupType Disabled
+
+# Disable Windows Error Reporting Manager service
+Set-Service -Name wermgr -StartupType Disabled
+
+# Set SvcHostSplitThresholdInKB to total RAM in KB
+$MemoryKB = (Get-CimInstance Win32_PhysicalMemory | Measure-Object Capacity -Sum).Sum / 1KB
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control" -Name "SvcHostSplitThresholdInKB" -Value [int]$MemoryKB
+
+# Remove PeriodInNanoSeconds key if it exists
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Siuf\Rules" -Name "PeriodInNanoSeconds" -ErrorAction SilentlyContinue
+
+Write-Output "Telemetry settings have been applied."
+```
+
+### `unapply.ps1`
+
+```powershell
+# Registry cleanup (removes entries added by apply.ps1)
+$registrySettings = @(
+    "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo\Enabled",
+    "HKCU:\Software\Microsoft\Windows\CurrentVersion\Privacy\TailoredExperiencesWithDiagnosticDataEnabled",
+    "HKCU:\Software\Microsoft\Speech_OneCore\Settings\OnlineSpeechPrivacy\HasAccepted",
+    "HKCU:\Software\Microsoft\Input\TIPC\Enabled",
+    "HKCU:\Software\Microsoft\InputPersonalization\RestrictImplicitInkCollection",
+    "HKCU:\Software\Microsoft\InputPersonalization\RestrictImplicitTextCollection",
+    "HKCU:\Software\Microsoft\InputPersonalization\TrainedDataStore\HarvestContacts",
+    "HKCU:\Software\Microsoft\Personalization\Settings\AcceptedPrivacyPolicy",
+    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection\AllowTelemetry",
+    "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackProgs",
+    "HKLM:\SOFTWARE\Policies\Microsoft\Windows\System\PublishUserActivities",
+    "HKCU:\Software\Microsoft\Siuf\Rules\NumberOfSIUFInPeriod"
+)
+
+foreach ($reg in $registrySettings) {
+    Remove-ItemProperty -Path ($reg -replace '\\[^\\]+$','') -Name ($reg -split '\\')[-1] -ErrorAction SilentlyContinue
+}
+
+# Enable Defender Auto Sample Submission
+Set-MpPreference -SubmitSamplesConsent 1
+
+# Enable Connected User Experiences and Telemetry service
+Set-Service -Name diagtrack -StartupType Automatic
+
+# Enable Windows Error Reporting Manager service
+Set-Service -Name wermgr -StartupType Automatic
+
+Write-Output "Telemetry settings have been reverted to default."
+```
+
+## Submit your tweak
+
+<Steps>
+  <Step title="Create the tweak directory">
+    Add a new folder under `tweaks/` using a descriptive kebab-case name, for example `tweaks/disable-cortana/`.
+  </Step>
+  <Step title="Write apply.ps1">
+    Implement the changes your tweak makes. Test it on a real Windows machine and verify it produces the expected result.
+  </Step>
+  <Step title="Write unapply.ps1 (if reversible)">
+    Implement the logic that restores the settings to their original state. If the tweak cannot be reversed, skip this file.
+  </Step>
+  <Step title="Write meta.json">
+    Fill in all required fields and any optional fields that apply. Set `addedversion` to the current Sparkle version.
+  </Step>
+  <Step title="Open a pull request">
+    Fork the [repository](https://github.com/parcoil/sparkle), commit your new tweak directory, and open a pull request with a clear description of what the tweak does and why it is useful.
+  </Step>
+</Steps>

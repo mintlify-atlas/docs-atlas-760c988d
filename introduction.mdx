@@ -1,0 +1,83 @@
+---
+title: "Introduction"
+description: "Sparkle is a free, open-source Windows optimization tool that debloats, cleans, and tunes your PC through a modern graphical interface."
+---
+
+Sparkle is a free, open-source Windows app built with Electron and React. It runs targeted PowerShell scripts behind the scenes to apply system tweaks, remove bloatware, manage DNS settings, install apps, and keep your PC clean — all without requiring you to touch the command line.
+
+<Warning>
+  Sparkle is currently in beta. While it has been tested extensively, you may encounter bugs. Always create a restore point before applying tweaks.
+</Warning>
+
+## What Sparkle does
+
+Sparkle gives you a single interface to perform common Windows optimization tasks that would otherwise require manual registry edits, PowerShell commands, or third-party utilities scattered across the web.
+
+- **Debloat and optimize** — apply registry and service tweaks to improve performance and privacy
+- **Clean junk files** — remove temp files, prefetch data, thumbnail caches, and update downloads
+- **Run built-in utilities** — launch `cleanmgr`, `sfc /scannow`, disk checks, and more from a GUI
+- **Manage DNS** — switch to Cloudflare, Google, OpenDNS, or a custom DNS server
+- **Install apps** — browse and install 100+ apps via Winget and Chocolatey integration
+- **Back up and restore** — create and restore Windows restore points without leaving Sparkle
+- **View system stats** — see live hardware and system information at a glance
+
+## Key features
+
+<CardGroup cols={3}>
+  <Card title="Tweaks" icon="toggle-on" href="/features/tweaks">
+    Apply and revert 39+ system optimizations across performance, privacy, gaming, and more.
+  </Card>
+  <Card title="Cleaner" icon="broom" href="/features/cleaner">
+    Free up disk space by clearing temp files, prefetch data, caches, and Windows Update downloads.
+  </Card>
+  <Card title="Utilities" icon="wrench" href="/features/utilities">
+    Run SFC, DISM, disk checks, and manage power plans from one place.
+  </Card>
+  <Card title="DNS manager" icon="globe" href="/features/dns-manager">
+    Switch to Cloudflare, Google, OpenDNS, or enter a custom DNS address.
+  </Card>
+  <Card title="App installer" icon="box-open" href="/features/apps">
+    Install popular apps in one click using built-in Winget and Chocolatey integration.
+  </Card>
+  <Card title="Backup & restore" icon="clock-rotate-left" href="/features/backup">
+    Create and restore Windows restore points directly from inside Sparkle.
+  </Card>
+</CardGroup>
+
+## Who Sparkle is for
+
+Sparkle is designed for Windows users who want to improve their system's performance and privacy without manually editing the registry or writing PowerShell scripts. It suits:
+
+- **Everyday users** who want a cleaner, faster PC with minimal effort
+- **Gamers** who want to squeeze out extra performance with targeted tweaks
+- **Privacy-conscious users** who want to reduce Windows telemetry and tracking
+- **Power users** who want quick access to built-in Windows tools in a single interface
+
+## System requirements
+
+| Requirement | Details |
+|---|---|
+| Operating system | Windows 10 or Windows 11 |
+| Permissions | Administrator rights (required to apply system changes) |
+| Architecture | 64-bit |
+
+<Note>
+  Sparkle requires administrator privileges every time it runs. The installer and portable build both request elevation automatically.
+</Note>
+
+## Get started
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Download and install Sparkle using the installer, portable build, or a PowerShell one-liner.
+  </Card>
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    Follow a step-by-step walkthrough to apply your first tweaks safely.
+  </Card>
+  <Card title="Tweaks reference" icon="sliders" href="/tweaks/overview">
+    Browse all available tweaks with descriptions and risk levels.
+  </Card>
+  <Card title="GitHub repository" icon="github" href="https://github.com/Parcoil/Sparkle">
+    View the source code, report issues, and contribute to the project.
+  </Card>
+</CardGroup>

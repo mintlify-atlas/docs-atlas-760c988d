@@ -1,0 +1,102 @@
+---
+title: Tweaks
+description: Apply targeted, reversible Windows optimizations organized by category and risk level.
+---
+
+Tweaks are small, targeted changes to Windows settings, registry keys, or system services that modify how your PC behaves. In Sparkle, each tweak is a self-contained PowerShell script that applies a specific optimization or customization.
+
+## How tweaks work
+
+Every tweak is built from three files:
+
+| File | Purpose |
+|------|---------|
+| `meta.json` | Defines the tweak's name, description, category, risk level, and other properties |
+| `apply.ps1` | Contains the PowerShell commands that make the change |
+| `unapply.ps1` | Reverses the change (present only for reversible tweaks) |
+
+When you toggle a tweak on, Sparkle runs `apply.ps1`. When you toggle it off, it runs `unapply.ps1`.
+
+<Note>
+Some tweaks don't have an `unapply.ps1`. These show an **Apply** button instead of a toggle, because the change cannot be automatically reversed.
+</Note>
+
+## Toggle vs. Apply button
+
+Sparkle uses two controls depending on whether a tweak is reversible:
+
+- **Toggle** — The tweak has both `apply.ps1` and `unapply.ps1`. You can turn it on and off at any time. The toggle reflects the current applied state.
+- **Apply button** — The tweak has only `apply.ps1`. Clicking **Apply** runs the script once. There is no automatic way to undo the change.
+
+## Modal warnings
+
+Some tweaks show a confirmation dialog before running. The modal displays the tweak name and a plain-language explanation of what will change. You must confirm before the script executes. This applies to both toggles and Apply buttons when the tweak's `modal` property is set.
+
+## Categories
+
+Tweaks are grouped into categories so you can quickly find what you need:
+
+<CardGroup cols={2}>
+  <Card title="General" icon="wrench">
+    Broad system tweaks and common settings.
+  </Card>
+  <Card title="Appearance" icon="paintbrush">
+    Visual changes like dark mode, taskbar layout, and clock format.
+  </Card>
+  <Card title="Performance" icon="bolt">
+    System optimizations that improve speed and responsiveness.
+  </Card>
+  <Card title="Privacy" icon="shield">
+    Disabling telemetry, tracking, and data collection.
+  </Card>
+  <Card title="Gaming" icon="gamepad">
+    Optimizations for FPS, game services, and GPU settings.
+  </Card>
+  <Card title="Network" icon="network-wired">
+    TCP/IP tuning, DNS, and network latency improvements.
+  </Card>
+  <Card title="GPU" icon="microchip">
+    Graphics driver and hardware-accelerated scheduling settings.
+  </Card>
+</CardGroup>
+
+## Risk levels
+
+Every tweak has a risk level so you know what to expect before applying it.
+
+| Risk | Meaning |
+|------|---------|
+| **Safe** | Low risk. These changes are unlikely to cause problems. Most tweaks fall into this category. |
+| **Caution** | May affect system behavior or certain apps. Review the tweak description before applying. |
+| **Risky** | Can significantly change system behavior. Apply with care and create a restore point first. |
+
+Risk levels are displayed as badges on each tweak card. Hovering over the badge shows a tooltip.
+
+<Warning>
+Risk level indicators require Sparkle 2.16.0 or later.
+</Warning>
+
+## Searching and filtering tweaks
+
+The Tweaks page provides two ways to narrow down the list:
+
+- **Search bar** — Type any part of a tweak's name or description to filter results in real time. The counter in the top right shows how many tweaks match.
+- **Category buttons** — Click a category pill to show only tweaks in that group. Select **All** to clear the filter.
+
+You can combine search and category filters at the same time.
+
+## Applying recommended tweaks
+
+The **Apply Recommended Tweaks** button opens a modal that lists a balanced set of tweaks suitable for everyday use. You can deselect individual items before confirming. Sparkle applies each selected tweak in sequence and shows a progress notification for each one.
+
+<Tip>
+Look for the star icon on tweak cards — it marks tweaks that are generally safe and beneficial for most users.
+</Tip>
+
+## Compatibility checks
+
+Sparkle checks your system hardware before showing controls. If a tweak requires hardware you don't have (for example, a dedicated GPU or an NVIDIA card), the toggle or button is disabled and a tooltip explains why.
+
+## Tweaks reference
+
+For the full list of available tweaks with descriptions, see the [Tweaks Reference](/tweaks/overview) section.

@@ -1,0 +1,157 @@
+---
+title: 'Network & general tweaks'
+description: 'Tweaks covering network optimization, system utilities, debloating, and general Windows configuration.'
+---
+
+This page covers tweaks that fall into the Network and General categories: network stack tuning, mouse input, system debloating, terminal configuration, time settings, and other Windows-wide changes that do not fit a single focused category.
+
+<AccordionGroup>
+  <Accordion title="Optimize Network Settings">
+    Changes various Windows settings to improve network latency and speeds.
+
+    Applies a comprehensive set of `netsh` TCP/IP tweaks: disabling latency-inducing features, enabling TCP Fast Open, offloading networking tasks to hardware, tuning congestion control, and setting optimal MTU. The goal is to maximize throughput, reduce CPU load from packet processing, and improve responsiveness for both gaming and general high-performance internet use.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Restart required** | Yes |
+  </Accordion>
+
+  <Accordion title="Disable Wifi Sense">
+    Disables Wifi Sense to prevent sharing of Wi-Fi networks with contacts.
+
+    Sets Wifi Sense policy values to `0`, disabling automatic connection to open hotspots and blocking location-based Wi-Fi hotspot reporting. This reduces unwanted background network activity and prevents Windows from sharing Wi-Fi credentials with your contacts.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Privacy.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Mouse Acceleration">
+    Disables mouse acceleration for consistent and precise cursor movement.
+
+    Sets `MouseSpeed`, `MouseThreshold1`, and `MouseThreshold2` to `0`, producing linear 1:1 cursor movement by disabling the Windows pointer precision (acceleration) curve.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      Linear mouse movement is especially valuable for gaming, but many users prefer it for general desktop use as well for more predictable cursor behavior.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Debloat Windows">
+    Removes built-in Windows apps and bloatware using one of two selectable methods.
+
+    Offers a choice between two removal approaches:
+
+    - **Sparkle Selective Script** — presents a WPF window where you check or uncheck individual apps to keep or remove.
+    - **Raphire's Win11Debloat Script** — a well-known community script that removes a wide range of built-in apps and features quickly and comprehensively.
+
+    Both methods remove unnecessary Microsoft components to reduce resource usage and background telemetry.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | No |
+    | **Recommended** | Yes |
+
+    <Warning>
+      Removed apps cannot be restored from within Sparkle. Use the Sparkle selective script if you want control over exactly what is removed.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Background MS Store Apps">
+    Disables Microsoft Store apps from running in the background.
+
+    Sets `GlobalUserDisabled` to `1` under the current user's `BackgroundAccessApplications` registry key, blocking all UWP apps from performing background activity such as fetching notifications or syncing data.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Performance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Detailed BSOD">
+    Adds detailed technical information to the Blue Screen of Death screen.
+
+    Sets `DisplayParameters` to `1` in the `CrashControl` registry key, causing Windows to display full technical crash details (stop code, faulting module, memory address) on the BSOD screen rather than the simplified consumer-facing message.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      Detailed BSOD output makes it significantly easier to diagnose the root cause of system crashes without needing to parse a minidump file.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Set PowerShell 7 as Default">
+    Sets PowerShell 7 as the default profile in Windows Terminal, installing it if not already present.
+
+    Modifies the Windows Terminal `settings.json` to make PowerShell 7 the default profile instead of Windows PowerShell 5. If PowerShell 7 is not installed, it is installed automatically via `winget` before the profile change is applied.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      You can revert to PowerShell 5 as the default at any time by changing the default profile in Windows Terminal settings.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Set Time To UTC">
+    Sets the system hardware clock to store time in UTC.
+
+    Configures Windows to read and write the hardware clock in UTC rather than local time. This is the standard behavior on Linux and most Unix-like systems.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      This tweak is strongly recommended on dual-boot systems where one partition runs Linux. Without it, Linux and Windows will fight over the hardware clock, causing the displayed time to be wrong after switching between operating systems.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Disable Fast Startup">
+    Disables Windows Fast Startup to ensure a full clean boot.
+
+    Sets `HiberbootEnabled` to `0`, preventing Windows from using hybrid hibernation during shutdown. Each startup is a full cold boot rather than a resume from a saved kernel state.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Performance. It can resolve driver and device issues that occur when Fast Startup preserves a stale kernel state across reboots.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Lockscreen Tips">
+    Disables tips and suggestions displayed on the Windows lock screen.
+
+    Removes the promotional tips, app suggestions, and Windows spotlight content that appear on the lock screen, producing a cleaner lock screen with only the time and background.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,317 @@
+---
+title: 'Performance tweaks'
+description: 'Tweaks that reduce latency, improve CPU scheduling, and free up system resources for better Windows performance.'
+---
+
+Performance tweaks target the Windows power subsystem, process scheduler, background services, and security features that trade performance for overhead. Apply them individually based on your hardware and use case.
+
+<AccordionGroup>
+  <Accordion title="Ultimate Performance Power Plan">
+    Enables and applies the Windows Ultimate Performance power plan for better performance.
+
+    The Ultimate Performance power plan is created if missing, its GUID is retrieved, and it is activated to maximize system responsiveness by preventing power-saving limitations from throttling CPU and I/O behavior.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Note>
+      This tweak is also categorized under Gaming. It is one of the most impactful single changes you can make for low-latency workloads.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Dynamic Ticking">
+    Improves system responsiveness and reduces latency by disabling dynamic timer ticks.
+
+    Disables Windows Dynamic Ticking by setting `disabledynamictick` to `yes` via `bcdedit`, which prevents the system timer from stopping between interrupts. This reduces input latency and improves responsiveness at the cost of higher idle power consumption.
+
+    | | |
+    |---|---|
+    | **Risk** | risky |
+    | **Reversible** | — |
+
+    <Warning>
+      Disabling dynamic ticking increases power consumption because the CPU timer runs continuously rather than stopping during idle periods. Not recommended for laptops or power-sensitive systems.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Set Win32 Priority Separation">
+    Optimizes foreground app performance by modifying system process priority behavior.
+
+    Sets the `Win32PrioritySeparation` registry key to favor foreground processes, giving the active window more CPU time relative to background tasks. This improves perceived responsiveness without disabling any services.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+  </Accordion>
+
+  <Accordion title="Set Services to Manual">
+    Sets various Windows services to manual startup type to improve performance.
+
+    Modifies the startup type of selected non-essential Windows services using `Set-Service`, delaying or disabling processes that are not required at boot. This reduces boot time, lowers idle CPU and RAM usage, and decreases background activity.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Note>
+      This tweak is also categorized under Gaming. Services are set to manual rather than disabled, so Windows can still start them on demand if an application requires them.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Fast Startup">
+    Disables Windows Fast Startup to improve system stability.
+
+    Sets `HiberbootEnabled` to `0`, preventing Windows from using hybrid hibernation during shutdown. This ensures a full clean boot on next startup, which can resolve driver and device state issues caused by the hybrid sleep mechanism.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+  </Accordion>
+
+  <Accordion title="Disable Hibernation">
+    Disables the hibernation feature to free up disk space and improve shutdown speed.
+
+    Runs `powercfg.exe` to turn off hibernation at the system level, which deletes `hiberfil.sys` and reclaims the disk space it occupied (typically equal to installed RAM). Shutdown speed also improves because the system no longer writes memory state to disk.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+
+    <Warning>
+      Not recommended for laptops. Disabling hibernation removes the ability to resume from a powered-off state and can prevent sleep from working correctly on some portable systems.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Telemetry">
+    Disables Windows telemetry and data collection for improved privacy and performance.
+
+    Modifies registry keys to prevent Windows from collecting and reporting diagnostic data. Reducing telemetry activity lowers background CPU and network usage alongside the privacy benefit.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Note>
+      This tweak is also categorized under Privacy.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Gamebar">
+    Disables the Xbox Game Bar to eliminate its background resource usage.
+
+    Attempts to remove the Xbox Gaming Overlay using `Remove-AppxPackage`, with a fallback to `winget`. Removing the overlay eliminates background Xbox services that consume CPU, RAM, and GPU resources and can cause in-game interruptions.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+
+    <Warning>
+      Do not apply this tweak if you have an AMD X3D processor (e.g., Ryzen 7 9800X3D). Game Bar allocates the 3D V-Cache cores to the active game. Disabling it prevents this cache optimization from functioning.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Remove Gaming Apps">
+    Removes the Xbox app, Xbox Game Bar, and Xbox Game Overlay.
+
+    Uninstalls Xbox-related UWP packages to eliminate their background services and scheduled tasks. This frees CPU and RAM that would otherwise be consumed by Xbox identity, social, and overlay processes.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | No |
+
+    <Warning>
+      This action cannot be undone from within Sparkle. To restore these apps, search for **Xbox Game Bar** and **Xbox App** in the Microsoft Store.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Optimize Nvidia Settings">
+    Changes NVIDIA Control Panel settings to improve gaming performance.
+
+    Applies a set of NVIDIA profile changes including disabling Image Scaling, Ambient Occlusion, V-Sync, and Triple Buffering; enabling Low Latency Mode and Threaded Optimization; setting Power Management Mode to Prefer Maximum Performance; and configuring texture filtering for high performance rather than quality.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | No |
+
+    <Note>
+      Changes can be reverted manually through the NVIDIA Control Panel. Open the NVIDIA Control Panel at least once before applying this tweak to ensure profile settings are initialized.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Core Isolation">
+    Disables Core Isolation Memory Integrity to improve system performance.
+
+    Creates the registry path for Hypervisor-Enforced Code Integrity (HVCI) under DeviceGuard if missing, and sets `Enabled` to `0` to disable it. HVCI adds a virtualization layer that checks kernel code integrity but introduces CPU overhead.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+    | **Restart required** | Yes |
+
+    <Warning>
+      Disabling Memory Integrity reduces protection against kernel-level exploits. Only apply this tweak on systems where performance is prioritized over security hardening.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Defender RTP">
+    Disables Windows Defender Real-Time Protection.
+
+    Sets the Defender policy `DisableRealtimeMonitoring` to `true`, instructing Windows Security to stop actively scanning files and processes as they run.
+
+    | | |
+    |---|---|
+    | **Risk** | risky |
+    | **Reversible** | — |
+
+    <Warning>
+      Disabling real-time protection exposes the system to malware that would otherwise be caught before execution. Only apply this on isolated, controlled systems where the performance trade-off is understood and acceptable.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Disable Background MS Store Apps">
+    Disables Microsoft Store apps from running in the background.
+
+    Sets `GlobalUserDisabled` to `1` under the current user's `BackgroundAccessApplications` registry key, preventing all UWP apps from performing background activity such as fetching notifications or syncing data.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+  </Accordion>
+
+  <Accordion title="Remove Microsoft Bing Integration">
+    Removes Bing apps and disables Bing web search in Windows Search.
+
+    Uninstalls all Microsoft Bing apps (News, Weather, Finance, etc.) and disables Bing web search results from appearing in the Windows Search box. This improves privacy and speeds up local search queries.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | Yes |
+
+    <Note>
+      This tweak is also categorized under Privacy. Removed apps can be reinstalled from the Microsoft Store.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Disable Mouse Acceleration">
+    Disables mouse acceleration for consistent and precise cursor movement.
+
+    Sets `MouseSpeed`, `MouseThreshold1`, and `MouseThreshold2` to `0`, disabling the Windows pointer precision (acceleration) curve and producing linear 1:1 cursor movement regardless of how fast the mouse is moved.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      Linear mouse movement is especially beneficial for gaming, where consistent hand-to-cursor mapping is important for muscle memory and aim.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Debloat Windows">
+    Removes built-in Windows apps and bloatware using one of two selectable methods.
+
+    Offers a choice between the Sparkle custom selective script (a WPF window where you choose which apps to keep) and Raphire's Win11Debloat script (a comprehensive removal of most built-in Microsoft apps). Both methods remove unnecessary components to reduce resource usage and background activity.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | No |
+    | **Recommended** | Yes |
+
+    <Warning>
+      Removed apps cannot be restored from within Sparkle. The Sparkle Debloat script is also available standalone at `getsparkle.net/debloat`.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Remove OneDrive">
+    Removes OneDrive from the system.
+
+    Uses registry edits, file system commands, and process termination to fully uninstall OneDrive, clean up leftover files, and restore Explorer defaults. This frees RAM, CPU, and I/O that OneDrive would otherwise consume through background sync and startup tasks. OneDrive files are moved to your home folder before removal.
+
+    | | |
+    |---|---|
+    | **Risk** | caution |
+    | **Reversible** | — |
+
+    <Note>
+      OneDrive can be reinstalled from the Microsoft website if needed after removal.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Menu Show Delay Zero">
+    Removes the delay when opening menus.
+
+    Reduces the `MenuShowDelay` registry key to `0ms`, eliminating the brief pause before context menus and submenus appear. This makes the UI feel more responsive without affecting system stability.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Appearance.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Enable HAGS">
+    Enables Hardware-Accelerated GPU Scheduling (HAGS).
+
+    Shifts GPU management and scheduling tasks from the CPU to the GPU itself, reducing CPU overhead and potentially improving performance and latency in GPU-heavy workloads.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Gaming. Results vary by GPU and driver version — test with your specific hardware.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Enable Game Mode">
+    Enables Game Mode on Windows.
+
+    Activates the Windows Game Mode feature, which can improve performance and reduce latency when a game is detected as the foreground application. Results vary by system — some users see improvement, others may not.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Gaming. Microsoft recommends testing with and without Game Mode to determine whether it benefits your specific setup.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Enable Optimization For Windowed Games">
+    Enables the Windows optimization feature for windowed games.
+
+    Activates the system-level windowed game optimization introduced in Windows 11, which applies rendering improvements to games running in windowed or borderless-windowed mode.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Restart required** | Yes |
+
+    <Note>
+      This tweak is also categorized under Gaming.
+    </Note>
+  </Accordion>
+</AccordionGroup>

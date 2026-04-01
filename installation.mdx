@@ -1,0 +1,100 @@
+---
+title: "Installation"
+description: "Download and install Sparkle on Windows 10 or 11 using the installer, portable build, or a PowerShell one-liner."
+---
+
+Sparkle runs on Windows 10 and Windows 11 (64-bit) and requires administrator rights. Choose the installation method that suits you.
+
+## Download options
+
+<Tabs>
+  <Tab title="PowerShell (recommended)">
+    Open PowerShell as administrator and run:
+
+    ```powershell
+    irm https://raw.githubusercontent.com/Parcoil/Sparkle/v2/get.ps1 | iex
+    ```
+
+    The script fetches the latest release from GitHub, downloads the installer, launches it with administrator privileges, and removes the installer file when done.
+  </Tab>
+  <Tab title="GitHub Releases">
+    Visit the [GitHub Releases page](https://github.com/Parcoil/Sparkle/releases/latest) and download either:
+
+    - **`sparkle-{version}-setup.exe`** — the standard installer (recommended for most users)
+    - **`sparkle-{version}-win.zip`** — the portable build (no installation required)
+  </Tab>
+  <Tab title="Website">
+    Go to [getsparkle.net](https://getsparkle.net) and choose **Installer** or **Portable** from the download options.
+  </Tab>
+</Tabs>
+
+## Installer vs portable
+
+| | Installer | Portable |
+|---|---|---|
+| Adds a Start menu shortcut | Yes | No |
+| Adds a desktop shortcut | Yes | No |
+| Appears in Settings > Apps | Yes | No |
+| Can be run from a USB drive | No | Yes |
+| Automatic updates | Yes | No |
+
+<Tip>
+  Use the installer if this is your primary machine. Use the portable build if you want to run Sparkle on multiple PCs without installing it on each one.
+</Tip>
+
+## Install Sparkle
+
+<Steps>
+  <Step title="Download the installer or run the PowerShell command">
+    Download `sparkle-{version}-setup.exe` from [GitHub Releases](https://github.com/Parcoil/Sparkle/releases/latest), or run the PowerShell one-liner above.
+  </Step>
+  <Step title="Run as administrator">
+    Right-click the installer and select **Run as administrator**. Sparkle requires elevated permissions to apply system changes, so the installer will prompt for a UAC confirmation.
+
+    <Note>
+      If you used the PowerShell one-liner, the script launches the installer with administrator privileges automatically.
+    </Note>
+  </Step>
+  <Step title="Follow the setup wizard">
+    Accept the license agreement and choose your install location. The installer creates a desktop shortcut and a Start menu entry by default.
+  </Step>
+  <Step title="Launch Sparkle">
+    Once installation completes, Sparkle opens automatically. On subsequent launches, use the desktop shortcut or search for **Sparkle** in the Start menu. Sparkle will always request administrator privileges at startup.
+  </Step>
+</Steps>
+
+## First launch
+
+When Sparkle opens for the first time:
+
+1. The app displays your current system information on the home screen.
+2. Navigate using the sidebar to access Tweaks, Cleaner, Utilities, DNS Manager, Apps, and Backup.
+3. Before applying any tweaks, go to the **Backup** page and create a restore point.
+
+<Warning>
+  Always create a restore point before applying tweaks. Some tweaks modify registry keys and Windows services. Most can be reverted from within Sparkle, but a restore point gives you a full system fallback.
+</Warning>
+
+## Uninstall Sparkle
+
+If you need to remove Sparkle from your system, follow these steps in order.
+
+<Steps>
+  <Step title="Revert tweaks (optional)">
+    Open Sparkle, navigate to the **Tweaks** page, and unapply any tweaks you no longer want. Restart your PC after reverting.
+
+    You can also use the **Backup** page to restore a Windows restore point created before you applied tweaks.
+  </Step>
+  <Step title="Close Sparkle completely">
+    Make sure Sparkle is not running, including in the system tray. Right-click the tray icon and select **Quit** if it is present.
+  </Step>
+  <Step title="Uninstall via Settings">
+    Go to **Settings > Apps > Installed apps**, find **Sparkle** in the list, and select **Uninstall**.
+
+    Alternatively, open the Run dialog (`Win + R`), enter `ms-settings:appsfeatures`, and locate Sparkle there.
+  </Step>
+</Steps>
+
+<Note>
+  For a complete removal that clears all leftover files, you can use **BCUninstaller**. It is available via Winget, through Sparkle's own App Installer, or from the [BCUninstaller releases page](https://github.com/Klocman/Bulk-Crap-Uninstaller/releases/latest).
+</Note>

@@ -1,97 +1,67 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "Welcome to Sparkle"
+description: "A free, open-source Windows app to debloat, optimize, and clean your PC."
 ---
 
-## Setting up
+Sparkle is a modern Windows optimization tool built with Electron and React. It gives you a clean, intuitive interface to apply system tweaks, remove bloatware, manage DNS, install apps, and keep your PC running fast — all without touching the command line.
 
-Get your documentation site up and running in minutes.
-
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
-
-<Columns cols={2}>
-  <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
-  >
-    Edit your docs locally and preview them in real time.
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Download and install Sparkle on your Windows PC in minutes.
   </Card>
-  <Card
-    title="Customize your site"
-    icon="palette"
-    href="/essentials/settings"
-  >
-    Customize the design and colors of your site to match your brand.
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Apply your first tweaks and optimize your system right away.
   </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+  <Card title="Tweaks Reference" icon="sliders" href="/tweaks/overview">
+    Browse all available tweaks across performance, privacy, gaming, and more.
   </Card>
-  <Card
-    title="API documentation"
-    icon="terminal"
-    href="/api-reference/introduction"
-  >
-    Auto-generate API documentation from OpenAPI specifications.
+  <Card title="Contributing" icon="code-pull-request" href="/contributing/overview">
+    Add new tweaks, apps, or improvements to the project.
   </Card>
-</Columns>
+</CardGroup>
 
-## Create beautiful pages
+## What Sparkle does
 
-Everything you need to create world-class documentation.
+Sparkle runs PowerShell scripts behind the scenes to apply targeted, reversible changes to Windows. Every tweak has a risk level so you always know what to expect before you apply it.
 
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+<CardGroup cols={3}>
+  <Card title="Tweaks" icon="toggle-on" href="/features/tweaks">
+    Apply and revert 39+ system optimizations with a single click.
   </Card>
-  <Card
-    title="Code samples"
-    icon="code"
-    href="/essentials/code"
-  >
-    Add sample code to demonstrate how to use your product.
+  <Card title="Cleaner" icon="broom" href="/features/cleaner">
+    Free up disk space by clearing temp files, cache, and junk.
   </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
+  <Card title="Utilities" icon="wrench" href="/features/utilities">
+    Run SFC, DISM, disk checks, and manage power plans from one place.
   </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
+  <Card title="DNS Manager" icon="globe" href="/features/dns-manager">
+    Switch to Cloudflare, Google, Quad9, AdGuard, or a custom DNS.
   </Card>
-</Columns>
+  <Card title="App Installer" icon="box-open" href="/features/apps">
+    Install 100+ apps via Winget and Chocolatey with one click.
+  </Card>
+  <Card title="Backup & Restore" icon="clock-rotate-left" href="/features/backup">
+    Create and restore Windows restore points from inside Sparkle.
+  </Card>
+</CardGroup>
 
-## Need inspiration?
+## Get started
 
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>
+<Steps>
+  <Step title="Download Sparkle">
+    Grab the latest installer or portable build from [GitHub Releases](https://github.com/Parcoil/Sparkle/releases/latest).
+  </Step>
+  <Step title="Run as Administrator">
+    Sparkle requires administrator privileges to apply system changes. Right-click the installer and select **Run as administrator**.
+  </Step>
+  <Step title="Create a restore point">
+    Before applying any tweaks, use the **Backup** page to create a Windows restore point so you can roll back if needed.
+  </Step>
+  <Step title="Apply tweaks">
+    Navigate to the **Tweaks** page, browse by category, and toggle on the changes you want. Most tweaks can be reversed at any time.
+  </Step>
+</Steps>
+
+<Warning>
+  Sparkle is currently in beta. Always create a restore point before applying tweaks. Some tweaks cannot be automatically reversed.
+</Warning>

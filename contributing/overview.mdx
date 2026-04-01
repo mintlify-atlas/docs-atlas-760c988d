@@ -1,0 +1,85 @@
+---
+title: "Contributing overview"
+description: "Ways to contribute to Sparkle and how to set up a local development environment."
+---
+
+Sparkle is an open-source project and contributions of all kinds are welcome. Whether you want to fix a bug, add a new tweak, improve the docs, or suggest a feature, this guide explains how to get involved.
+
+<Warning>
+  Sparkle is currently in beta. Always back up your system before applying tweaks, and test your changes thoroughly before submitting a pull request.
+</Warning>
+
+## Ways to contribute
+
+<CardGroup cols={2}>
+  <Card title="Report bugs" icon="bug">
+    Open an issue on [GitHub](https://github.com/parcoil/sparkle/issues) with your Sparkle version, Windows version, log file, steps to reproduce, and the expected vs. actual behavior. Logs are located at `C:\Users\YOUR_USER\AppData\Roaming\sparkle\logs`.
+  </Card>
+  <Card title="Submit pull requests" icon="code-pull-request">
+    Fork the [repository](https://github.com/parcoil/sparkle), create a branch, make and test your changes, then open a pull request with a clear description of what you changed and why.
+  </Card>
+  <Card title="Add tweaks" icon="sliders">
+    Write a PowerShell script and a `meta.json` to add a new optimization tweak. See the [creating tweaks](/contributing/creating-tweaks) guide for the full spec.
+  </Card>
+  <Card title="Add apps" icon="grid-2-plus">
+    Add an entry to `apps.json` to make a new application available in the Sparkle app installer. See the [adding apps](/contributing/adding-apps) guide.
+  </Card>
+  <Card title="Improve documentation" icon="book-open">
+    Fix typos, expand explanations, or add missing content. Documentation lives in the `docs/` directory of the repository.
+  </Card>
+  <Card title="Enhance UI/UX" icon="paintbrush">
+    Improve the look or usability of the Electron front-end. Sparkle is built with React and TypeScript.
+  </Card>
+</CardGroup>
+
+## Development setup
+
+### Prerequisites
+
+- **Node.js** v22 or higher
+- **Windows 10 or 11** (required — some features only work on Windows)
+
+<Note>
+  Running Sparkle in development mode with administrator privileges is recommended. Some tweaks and features require elevated permissions to function correctly.
+</Note>
+
+### Run Sparkle locally
+
+<Steps>
+  <Step title="Fork and clone the repository">
+    Fork the repository on GitHub, then clone your fork:
+
+    ```bash
+    git clone https://github.com/parcoil/sparkle.git
+    cd sparkle
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    ```bash
+    npm install
+    ```
+  </Step>
+  <Step title="Start development mode">
+    ```bash
+    npm run dev
+    ```
+
+    This launches Sparkle with hot reload enabled for both the Electron main process and the renderer process.
+  </Step>
+  <Step title="Build for production">
+    When you are ready to produce a distributable build, run:
+
+    ```bash
+    npm run build
+    ```
+
+    This generates optimized production builds in the `dist/` directory.
+  </Step>
+</Steps>
+
+## Community
+
+Join the conversation and get help from other contributors:
+
+- [GitHub repository](https://github.com/parcoil/sparkle) — source code, issues, and pull requests
+- [Discord server](https://discord.com/invite/En5YJYWj3Z) — chat with the community and the maintainers

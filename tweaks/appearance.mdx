@@ -1,0 +1,107 @@
+---
+title: 'Appearance tweaks'
+description: 'Tweaks that customize the Windows taskbar, clock, context menu, and other visual elements.'
+---
+
+Appearance tweaks adjust the visual presentation and UI behavior of Windows — including taskbar layout, clock format, theme, and context menu style. All of these tweaks are safe to apply and can be reverted by changing the relevant setting manually.
+
+<AccordionGroup>
+  <Accordion title="Set 24-Hour Clock">
+    Changes the clock to display time in 24-hour format.
+
+    Updates the user's regional time settings in the registry to switch the taskbar clock, apps, and system timestamps to a true 24-hour format.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      If the taskbar clock does not update immediately after applying this tweak, restart Explorer from within Sparkle Settings.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Align Taskbar Left">
+    Aligns the taskbar icons to the left side of the screen.
+
+    Sets the `TaskbarAl` registry value to `0`, moving the taskbar Start button and icons back to the left-aligned position used in Windows 10 and earlier.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+  </Accordion>
+
+  <Accordion title="Enable Dark Mode">
+    Enables dark mode for Windows system UI and apps.
+
+    Sets system and app theme registry values to `0` and restarts Explorer to apply the change. This also works on unactivated Windows installations where the personalization settings panel is normally locked.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Tip>
+      This is particularly useful on unactivated systems where dark mode cannot be set through the Settings app.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Hide Taskview and Widgets">
+    Hides the Task View and Widgets buttons from the taskbar.
+
+    Disables both the Task View button and the Widgets panel by updating Explorer taskbar registry settings, removing both icons from the taskbar.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Warning>
+      This tweak removes the Windows Widgets feature entirely. To restore it, run `winget install 9MSSGKG348SP` or search for **Windows Web Experience Pack** in the Microsoft Store.
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Show Seconds in Taskbar Clock">
+    Enables the seconds display in the taskbar clock.
+
+    Sets the `ShowSecondsInSystemClock` registry key to display seconds alongside the hours and minutes in the Windows taskbar clock.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | Yes |
+    | **Restart required** | Yes (Explorer restart) |
+  </Accordion>
+
+  <Accordion title="Revert Context Menu">
+    Reverts the right-click context menu to the classic Windows 10 style.
+
+    Creates a blank `InprocServer32` key under a specific CLSID to disable the modern condensed right-click context menu in Windows 11, restoring the full classic context menu and improving responsiveness in File Explorer.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+    | **Recommended** | Yes |
+
+    <Tip>
+      The classic context menu displays all options immediately without requiring you to click "Show more options", which makes common file operations faster.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Menu Show Delay Zero">
+    Removes the delay when opening menus.
+
+    Reduces the `MenuShowDelay` registry value to `0ms`, eliminating the brief pause before context menus and submenus appear on hover or click.
+
+    | | |
+    |---|---|
+    | **Risk** | safe |
+    | **Reversible** | — |
+
+    <Note>
+      This tweak is also categorized under Performance, as it contributes to a more responsive UI feel.
+    </Note>
+  </Accordion>
+</AccordionGroup>

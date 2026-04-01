@@ -1,0 +1,74 @@
+---
+title: 'Tweaks reference'
+description: 'A complete reference for every tweak available in Sparkle, organized by category.'
+---
+
+Sparkle tweaks are individual, targeted changes to Windows settings, registry keys, and system services. Each tweak is scoped to a single concern — you can apply them selectively and, where supported, reverse them at any time.
+
+Tweaks are grouped into five categories based on what they affect:
+
+<CardGroup cols={2}>
+  <Card title="Performance" icon="gauge" href="/tweaks/performance">
+    Power plans, process priority, services, and other tweaks that reduce latency and improve system responsiveness.
+  </Card>
+  <Card title="Privacy" icon="shield" href="/tweaks/privacy">
+    Disable telemetry, location tracking, Recall, consumer features, and other data-collection mechanisms.
+  </Card>
+  <Card title="Gaming" icon="gamepad-2" href="/tweaks/gaming">
+    Game Mode, HAGS, NVIDIA settings, windowed game optimization, and more for a better in-game experience.
+  </Card>
+  <Card title="Appearance" icon="paintbrush" href="/tweaks/appearance">
+    Taskbar alignment, dark mode, clock format, context menu style, and other visual customizations.
+  </Card>
+  <Card title="Network & General" icon="network" href="/tweaks/network">
+    Network stack tuning, mouse acceleration, debloating, system utilities, and general Windows settings.
+  </Card>
+</CardGroup>
+
+## All tweaks
+
+The table below lists every tweak available in Sparkle. Risk levels are `safe`, `caution`, or `risky`. The **Reversible** column indicates whether the tweak can be undone from within Sparkle.
+
+| Tweak | Category | Risk | Reversible |
+|---|---|---|---|
+| Ultimate Performance Power Plan | Performance, Gaming | caution | — |
+| Disable Dynamic Ticking | Performance | risky | — |
+| Set Win32 Priority Separation | Performance | safe | — |
+| Set Services to Manual | Performance, Gaming | caution | — |
+| Disable Fast Startup | Performance, General | safe | — |
+| Disable Hibernation | Performance, General | caution | — |
+| Disable Telemetry | Privacy, Performance | safe | — |
+| Disable Location Tracking | Privacy | safe | — |
+| Disable Wifi Sense | Privacy, Network | safe | — |
+| Disable Consumer Features | Privacy | safe | Yes |
+| Disable Windows Recall | Privacy | safe | Yes |
+| Remove Microsoft Bing Integration | Privacy, Performance | safe | Yes |
+| Disable Windows Platform Binary Table | Privacy | caution | Yes |
+| Enable Game Mode | Gaming, Performance | safe | — |
+| Enable HAGS | Gaming, Performance | safe | — |
+| Disable Gamebar | Performance | caution | — |
+| Optimize Nvidia Settings | Gaming, Performance | safe | No |
+| Remove Gaming Apps | Performance, Privacy | caution | No |
+| Enable Optimization For Windowed Games | Gaming, Performance | safe | — |
+| Set 24-Hour Clock | Appearance, General | safe | — |
+| Align Taskbar Left | Appearance, General | safe | — |
+| Enable Dark Mode | Appearance, General | safe | — |
+| Hide Taskview and Widgets | Appearance, General | safe | — |
+| Show Seconds in Taskbar Clock | Appearance, General | safe | Yes |
+| Revert Context Menu | Appearance, General | safe | — |
+| Menu Show Delay Zero | Performance, Appearance | safe | — |
+| Optimize Network Settings | Network, Gaming | safe | — |
+| Disable Mouse Acceleration | Performance, Gaming | safe | — |
+| Debloat Windows | Performance, Privacy | safe | No |
+| Remove OneDrive | Performance, Privacy | caution | — |
+| Disable Defender RTP | Performance, General | risky | — |
+| Disable Core Isolation | Performance, Gaming | caution | — |
+| Disable Background MS Store Apps | Performance, Privacy | safe | — |
+| Detailed BSOD | General | safe | — |
+| Set PowerShell 7 as Default | General | safe | — |
+| Set Time To UTC | General | safe | — |
+| Disable Lockscreen Tips | General | safe | — |
+
+<Info>
+  Risk levels reflect the potential for unintended side effects, not the likelihood of data loss. Always read the description of a tweak before applying it.
+</Info>

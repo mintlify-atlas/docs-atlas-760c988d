@@ -1,0 +1,112 @@
+---
+title: Apps
+description: Install and uninstall over 100 applications using Winget or Chocolatey, with support for exporting and importing your app selection.
+---
+
+The Apps page is a curated application installer that uses Winget (Windows Package Manager) or Chocolatey to install and remove software. You browse apps by category, select what you want, and click **Install Selected** or **Uninstall Selected** to run the operation. Progress is shown in the title bar.
+
+## Package manager support
+
+Sparkle supports two package managers:
+
+- **Winget** — The default Windows Package Manager. Available on Windows 10 and later.
+- **Chocolatey** — A community-driven package manager with a large library of apps.
+
+Use the **Select Source** dropdown to switch between them. If the selected package manager is not installed, Sparkle detects this and offers to install it for you.
+
+<Note>
+When you switch sources, your current app selection is cleared so that only apps available in the new source are shown.
+</Note>
+
+## App categories
+
+Apps are organized into nine categories:
+
+| Category | Examples |
+|----------|---------|
+| **Browsers** | Firefox, Chrome, Brave, Opera, Vivaldi, Tor Browser, Zen Browser |
+| **Communication** | Discord, Slack, Teams, Telegram, Zoom, Signal, Vesktop |
+| **Development** | VS Code, Visual Studio, Git, GitHub Desktop, Node.js, Docker, Python, Rust, Go |
+| **Games** | Steam, Epic Games, EA App, Battle.net, Minecraft Launcher, Playnite, Modrinth |
+| **Multimedia** | Spotify, VLC, OBS Studio, Audacity, Krita, ShareX, FxSound |
+| **Productivity** | Notion, Dropbox, Microsoft Office, Blender |
+| **Privacy & Security** | Surfshark, NordVPN, Proton VPN, Mullvad, Bitwarden, Malwarebytes |
+| **Utilities** | 7-Zip, PowerToys, Rufus, MSI Afterburner, Everything Search |
+| **Python** | Python 3.8 through 3.13 |
+
+Use the search bar at the top to filter apps by name across all categories.
+
+## Selecting and installing apps
+
+<Steps>
+  <Step title="Select apps">
+    Click an app card or its checkbox to select it. You can select multiple apps across different categories. Click **Uncheck All** to clear your selection.
+  </Step>
+  <Step title="Install or uninstall">
+    Click **Install Selected** to install all selected apps, or **Uninstall Selected** to remove them. Sparkle passes the app IDs to Winget or Chocolatey and runs the operation in the background. Progress is tracked in the title bar.
+  </Step>
+</Steps>
+
+<Warning>
+Some apps display a warning icon if they have known installation issues when running as administrator. Read the warning before proceeding.
+</Warning>
+
+## Exporting and importing an app list
+
+You can save your current selection and restore it later or share it with others.
+
+- **Export List** — Downloads a `sparkle-apps.json` file containing the package IDs of all currently selected apps.
+- **Import List** — Opens a file picker to load a previously exported JSON file. After importing, a modal shows the apps in the file with checkboxes so you can deselect any you don't want before installing.
+
+The exported file is a plain JSON array of package ID strings:
+
+```json
+[
+  "Mozilla.Firefox",
+  "VideoLAN.VLC",
+  "Microsoft.VisualStudioCode"
+]
+```
+
+## App card information
+
+Each app card shows:
+
+- App icon
+- App name
+- Short description
+- Package ID
+- External link button to open the app's website (when a URL is provided)
+
+## Adding apps via apps.json
+
+The app list is loaded from `src/renderer/assets/apps.json`. To contribute a new app, add an entry with the following structure:
+
+```json
+{
+  "name": "App Name",
+  "id": "Publisher.AppName",
+  "chocolatey": "package-name",
+  "category": "category-name",
+  "info": "Short description of the app.",
+  "link": "https://example.com",
+  "icon": "https://example.com/icon.png"
+}
+```
+
+### Field reference
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `name` | Yes | Display name shown on the app card. |
+| `id` | Yes* | Winget package ID (e.g., `Mozilla.Firefox`). |
+| `chocolatey` | No | Chocolatey package name. Required if the app should appear when Chocolatey is selected as the source. |
+| `category` | Yes | Category for grouping. Must match an existing category name (e.g., `browsers`, `development`). |
+| `info` | Yes | Short description shown on the app card. |
+| `link` | No | Website URL. Shown as an external link button on the card. |
+| `icon` | Yes | URL to the app's icon image. Displayed on the card. |
+| `warning` | No | Optional warning message shown to users before installation. |
+
+\*Required for the Winget source. An app can have only a `chocolatey` field if it is not available via Winget.
+
+After editing `apps.json`, submit a pull request on [GitHub](https://github.com/parcoil/sparkle).

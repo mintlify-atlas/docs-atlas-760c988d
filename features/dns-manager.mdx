@@ -1,0 +1,63 @@
+---
+title: DNS manager
+description: Switch your DNS servers to improve speed, privacy, or security, or enter your own custom addresses.
+---
+
+The DNS Manager lets you change the DNS servers used by all active network adapters on your PC. When you apply a provider or custom DNS, Sparkle updates both your Wi-Fi and Ethernet adapters and flushes the DNS cache automatically.
+
+## Current DNS settings
+
+The top card on the DNS page shows the DNS servers currently configured for each active adapter. Click the **Refresh** button to re-fetch the information. The list loads automatically when you open the page.
+
+## Finding the fastest DNS
+
+Click **Test All Servers** to ping each built-in DNS provider's primary server. Sparkle runs two pings per server and displays the average latency in milliseconds. Results are sorted from fastest to slowest, and the lowest-latency server is highlighted. Use this to pick the provider that performs best from your location.
+
+## DNS providers
+
+Sparkle includes six preset providers:
+
+| Provider | Primary DNS | Secondary DNS | Description |
+|---------|------------|--------------|-------------|
+| **Cloudflare** | `1.1.1.1` | `1.0.0.1` | Fast, secure, and privacy-focused DNS. Recommended for most users. |
+| **Google** | `8.8.8.8` | `8.8.4.4` | Reliable and widely used DNS service. |
+| **OpenDNS** | `208.67.222.222` | `208.67.220.220` | Cisco-owned DNS with content filtering. |
+| **Quad9** | `9.9.9.9` | `149.112.112.112` | Security-focused DNS with threat blocking. |
+| **AdGuard DNS** | `94.140.14.14` | `94.140.15.15` | Blocks ads, trackers, and malware at the DNS level. |
+| **Automatic (DHCP)** | Auto | Auto | Uses your ISP's default DNS servers. No manual configuration required. |
+
+Click any provider card to open a confirmation dialog. The dialog shows the primary and secondary addresses before you confirm.
+
+<Info>
+DNS changes are applied to all active Wi-Fi and Ethernet adapters. Sparkle flushes the DNS cache automatically after applying any change.
+</Info>
+
+## Custom DNS
+
+If you want to use a DNS provider not listed above, expand the **Custom DNS** section and enter your own addresses.
+
+- **Primary DNS** is required.
+- **Secondary DNS** is optional.
+- Both fields validate IPv4 format using a regex check. The **Apply Custom DNS** button stays disabled until the primary address is a valid IPv4 address and the secondary (if provided) is also valid.
+
+<Note>
+Custom DNS values must be valid IPv4 addresses in the format `x.x.x.x` (for example, `1.1.1.1`). IPv6 addresses are not currently supported in this field.
+</Note>
+
+## How changes are applied
+
+When you confirm a DNS change, Sparkle:
+
+<Steps>
+  <Step title="Enumerates active adapters">
+    Queries all network adapters with a status of `Up` using `Get-NetAdapter`.
+  </Step>
+  <Step title="Sets DNS servers">
+    Calls `Set-DnsClientServerAddress` for each adapter's `InterfaceIndex`. For **Automatic (DHCP)**, it passes `-ResetServerAddresses` to remove any manually configured servers.
+  </Step>
+  <Step title="Flushes the DNS cache">
+    Runs `ipconfig /flushdns` to clear stale records immediately after the adapter configuration changes.
+  </Step>
+</Steps>
+
+Changes take effect immediately — you do not need to restart your PC or network adapters.
